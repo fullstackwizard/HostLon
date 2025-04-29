@@ -1,6 +1,6 @@
 "use client";
 import LogoHostlon from "../ui/logo";
-import { ChevronsDown, Github, Menu } from "lucide-react";
+import { ChevronsDown, Menu, User, HelpCircle, Circle, FileText, Flame } from "lucide-react";
 import React from "react";
 import {
   Sheet,
@@ -23,10 +23,17 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { ToggleTheme } from "./toogle-theme";
+import { LucideIcon, Globe, Server, Mail, Share2 } from "lucide-react";
 
+export type RouteProps = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+};
 interface RouteProps {
   href: string;
   label: string;
+  icon: LucideIcon;
 }
 
 interface FeatureProps {
@@ -35,23 +42,12 @@ interface FeatureProps {
 }
 
 const routeList: RouteProps[] = [
-  {
-    href: "#testimonials",
-    label: "Testimonials",
-  },
-  {
-    href: "#team",
-    label: "Team",
-  },
-  {
-    href: "#contact",
-    label: "Contact",
-  },
-  {
-    href: "#faq",
-    label: "FAQ",
-  },
+  { href: "#hospedagem", label: "Hospedagem", icon: Server },
+  { href: "#revenda", label: "Revenda", icon: Share2 },
+  { href: "#email", label: "E-Mail", icon: Mail },
+  { href: "#dominio", label: "Domínio", icon: Globe },
 ];
+
 
 const featureList: FeatureProps[] = [
   {
@@ -75,7 +71,7 @@ export const Navbar = () => {
   return (
     <header className="shadow-inner bg-opacity-15 w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl top-5 mx-auto sticky border border-secondary z-40 rounded-2xl flex justify-between items-center p-2 bg-card">
       <Link href="/" className="font-bold text-lg flex items-center">
-        <LogoHostlon/>
+        <LogoHostlon />
       </Link>
       {/* <!-- Mobile --> */}
       <div className="flex items-center lg:hidden">
@@ -95,8 +91,7 @@ export const Navbar = () => {
               <SheetHeader className="mb-4 ml-4">
                 <SheetTitle className="flex items-center">
                   <Link href="/" className="flex items-center">
-                    <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
-                    Shadcn
+                    <LogoHostlon />
                   </Link>
                 </SheetTitle>
               </SheetHeader>
@@ -118,7 +113,6 @@ export const Navbar = () => {
 
             <SheetFooter className="flex-col sm:flex-col justify-start items-start">
               <Separator className="mb-2" />
-
               <ToggleTheme />
             </SheetFooter>
           </SheetContent>
@@ -129,9 +123,11 @@ export const Navbar = () => {
       <NavigationMenu className="hidden lg:block mx-auto">
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="bg-card text-base">
-              Features
+            <NavigationMenuTrigger className="bg-card text-base flex items-center space-x-2 text-white hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-red-500 hover:via-orange-400 hover:to-yellow-300 transition-all duration-300">
+              <Flame className="size-5 text-orange-500 animate-pulse" />
+              <span className="font-bold">OFERTAS</span>
             </NavigationMenuTrigger>
+
             <NavigationMenuContent>
               <div className="grid w-[600px] grid-cols-2 gap-5 p-4">
                 <Image
@@ -159,30 +155,74 @@ export const Navbar = () => {
               </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
+          {routeList.map(({ href, label, icon: Icon }) => (
+            <NavigationMenuItem key={href}>
+              <NavigationMenuTrigger className="bg-card text-base flex items-center space-x-2 hover:text-primary">
+                <Icon className="size-4 text-primary" />
+                <span>{label}</span>
 
-          <NavigationMenuItem>
-            {routeList.map(({ href, label }) => (
-              <NavigationMenuLink key={href} asChild>
-                <Link href={href} className="text-base px-2">
-                  {label}
-                </Link>
-              </NavigationMenuLink>
-            ))}
-          </NavigationMenuItem>
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="w-60 p-4 space-y-2">
+                  <p className="font-semibold text-foreground text-sm">{label}</p>
+                  <p className="text-muted-foreground text-xs leading-snug">
+                    Conheça nossos planos de {label.toLowerCase()} com alta performance.
+                  </p>
+                  <Link
+                    href={href}
+                    className="inline-block mt-2 text-sm font-medium text-primary underline"
+                  >
+                    <Button
+                      asChild
+                      size="sm"
+                      variant="ghost"
+                      aria-label="Vermais"
+                    >
+                      <Link href="/segunda-via" className="flex items-center space-x-2">
+                        <span>Ver mais</span>
+                      </Link>
+                    </Button>
+                  </Link>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          ))}
+
         </NavigationMenuList>
       </NavigationMenu>
 
       <div className="hidden lg:flex">
         <ToggleTheme />
-
-        <Button asChild size="sm" variant="ghost" aria-label="View on GitHub">
-          <Link
-            aria-label="View on GitHub"
-            href="https://github.com/nobruf/shadcn-landing-page.git"
-            target="_blank"
-          >
-            <Github className="size-5" />
+        <Button
+          asChild
+          size="sm"
+          variant="ghost"
+          aria-label="Segunda via da fatura"
+        >
+          <Link href="/segunda-via" className="flex items-center space-x-2">
+            <FileText className="size-5" />
+            <span>2ª via da fatura</span>
           </Link>
+        </Button>
+
+        <Button asChild size="sm" variant="ghost" aria-label="Minha conta">
+          <Link
+            href="/minha-conta" // Altere para a rota real da sua área do usuário
+            aria-label="Ir para a área do usuário"
+          >
+            <User className="size-5 mr-1" />
+            Painel
+          </Link>
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label="Status do sistema"
+          className="flex items-center space-x-2 text-green-600"
+        >
+          <Circle className="fill-green-500 stroke-green-600 size-3" />
+          <span className="text-sm">Status</span>
         </Button>
       </div>
     </header>
